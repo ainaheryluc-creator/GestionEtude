@@ -1,0 +1,104 @@
+{% extends "head/base.html" %}
+{% block title %}Tableau de bord{% endblock %}
+{% block content %}
+
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center">
+        <div class="me-3" style="width: 4px; height: 32px; background: #f59e0b; border-radius: 4px;"></div>
+        <h2 class="fw-bold mb-0">Tableau de bord</h2>
+    </div>
+    <div>
+        <span class="head-user-badge me-2"><i class="bi bi-shield-fill me-1"></i>Chef</span>
+        <span class="badge fs-6" style="background: rgba(245,158,11,0.15); color: #fcd34d; padding: 0.5rem 1rem;">{{ departement }}</span>
+    </div>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card blue">
+            <div class="card-body">
+                <h6 class="text-white-50" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Étudiants</h6>
+                <h2 class="text-white fw-bold mb-0">{{ stats.etudiants }}</h2>
+                <i class="bi bi-people-fill stat-icon text-white"></i>
+                <a href="{{ url_for('head_students') }}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card orange">
+            <div class="card-body">
+                <h6 class="text-white-50" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Annonces</h6>
+                <h2 class="text-white fw-bold mb-0">{{ stats.annonces }}</h2>
+                <i class="bi bi-megaphone-fill stat-icon text-white"></i>
+                <a href="{{ url_for('head_annonces') }}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card green">
+            <div class="card-body">
+                <h6 class="text-white-50" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Cours</h6>
+                <h2 class="text-white fw-bold mb-0">{{ stats.cours }}</h2>
+                <i class="bi bi-book-fill stat-icon text-white"></i>
+                <a href="{{ url_for('head_cours_liste') }}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-people-fill me-2" style="color: #3b82f6;"></i>Derniers étudiants</span>
+                <a href="{{ url_for('head_students') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">Gérer <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead><tr><th>Matricule</th><th>Nom</th><th>Email</th></tr></thead>
+                        <tbody>
+                            {% for e in etudiants %}
+                            <tr>
+                                <td><span class="badge bg-secondary">{{ e.matricule }}</span></td>
+                                <td class="fw-semibold">{{ e.prenom }} {{ e.nom }}</td>
+                                <td style="color: #94a3b8;">{{ e.email }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="empty-state py-4"><i class="bi bi-people"></i><p class="mb-0">Aucun étudiant</p></td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card h-100">
+            <div class="card-header"><i class="bi bi-lightning-fill me-2" style="color: #f59e0b;"></i>Actions rapides</div>
+            <div class="card-body">
+                <a href="{{ url_for('head_student_create') }}" class="quick-action-card d-flex align-items-center text-decoration-none mb-2">
+                    <i class="bi bi-person-plus-fill fs-4 me-3" style="color: #3b82f6;"></i>
+                    <div><div class="fw-semibold" style="color: #e2e8f0;">Créer un compte étudiant</div><small style="color: #64748b;">Ajouter un étudiant au département</small></div>
+                    <i class="bi bi-chevron-right ms-auto" style="color: #475569;"></i>
+                </a>
+                <a href="{{ url_for('head_annonce_create') }}" class="quick-action-card d-flex align-items-center text-decoration-none mb-2">
+                    <i class="bi bi-megaphone-fill fs-4 me-3" style="color: #f59e0b;"></i>
+                    <div><div class="fw-semibold" style="color: #e2e8f0;">Publier une annonce</div><small style="color: #64748b;">Choisir la visibilité (public/département)</small></div>
+                    <i class="bi bi-chevron-right ms-auto" style="color: #475569;"></i>
+                </a>
+                <a href="{{ url_for('head_notes_ajouter') }}" class="quick-action-card d-flex align-items-center text-decoration-none mb-2">
+                    <i class="bi bi-plus-circle-fill fs-4 me-3" style="color: #10b981;"></i>
+                    <div><div class="fw-semibold" style="color: #e2e8f0;">Ajouter une note</div><small style="color: #64748b;">Saisir une note pour un étudiant</small></div>
+                    <i class="bi bi-chevron-right ms-auto" style="color: #475569;"></i>
+                </a>
+                <a href="{{ url_for('head_inscriptions_ajouter') }}" class="quick-action-card d-flex align-items-center text-decoration-none">
+                    <i class="bi bi-pencil-fill fs-4 me-3" style="color: #06b6d4;"></i>
+                    <div><div class="fw-semibold" style="color: #e2e8f0;">Inscrire un étudiant</div><small style="color: #64748b;">Inscrire à un cours</small></div>
+                    <i class="bi bi-chevron-right ms-auto" style="color: #475569;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

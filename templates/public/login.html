@@ -1,0 +1,42 @@
+{% extends "public/base.html" %}
+{% block title %}Connexion — Université Privée Hay (UPH){% endblock %}
+{% block content %}
+
+<div class="row justify-content-center" style="margin-top: 3rem;">
+    <div class="col-md-5">
+        <div class="card login-card border-0 shadow-lg">
+            <div class="login-header text-white">
+                <i class="bi bi-mortarboard-fill display-5 mb-2 d-block"></i>
+                <h4 class="fw-bold mb-1">Connexion</h4>
+                <p class="mb-0" style="opacity: 0.85; font-size: 0.9rem;">Université Privée Hay (UPH) — 67 Ha</p>
+            </div>
+            <div class="login-body" style="background: #fff;">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label" style="color: #475569;">Email</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-envelope-fill"></i></span>
+                            <input type="email" name="email" class="form-control" placeholder="votre@email.com" required style="background: #f8fafc;">
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label" style="color: #475569;">Mot de passe</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                            <input type="password" name="password" class="form-control" placeholder="Votre mot de passe" required style="background: #f8fafc;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Se connecter
+                    </button>
+                </form>
+                <hr style="border-color: #f1f5f9;">
+                <div class="text-center" style="color: #94a3b8; font-size: 0.85rem;">
+                    <p class="mb-1"><strong style="color: #475569;">Chefs de département</strong> : Utilisez votre email professionnel</p>
+                    <p class="mb-0"><strong style="color: #475569;">Étudiants</strong> : Utilisez l'email fourni par votre département</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

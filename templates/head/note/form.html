@@ -1,0 +1,54 @@
+{% extends "head/base.html" %}
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: var(--gradient-primary); border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0">{{ "Modifier" if note and note._id else "Ajouter" }} une note</h2>
+</div>
+<div class="card">
+    <div class="card-body p-4">
+        <form method="POST">
+            <div class="row g-3">
+                {% if note and note._id %}
+                <div class="col-md-6"><label class="form-label">Étudiant</label><input type="text" class="form-control" value="{{ note.etudiant_nom if note.etudiant_nom is defined else '' }}" disabled></div>
+                <div class="col-md-6"><label class="form-label">Cours</label><input type="text" class="form-control" value="{{ note.cours_intitule if note.cours_intitule is defined else '' }}" disabled></div>
+                {% else %}
+                <div class="col-md-6">
+                    <label class="form-label">Étudiant</label>
+                    <select name="id_etudiant" class="form-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        {% for e in etudiants %}<option value="{{ e._id }}">{{ e.nom }} {{ e.prenom }} ({{ e.matricule }})</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Cours</label>
+                    <select name="id_cours" class="form-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        {% for c in cours %}<option value="{{ c._id }}">{{ c.code }} — {{ c.intitule }} [{{ c.semestre if c.semestre else 'S1' }} · {{ c.code_ue if c.code_ue else 'U000' }}]</option>{% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                <div class="col-md-4">
+                    <label class="form-label">Note (0-20)</label>
+                    <input type="number" name="valeur" class="form-control" value="{{ note.valeur if note else '' }}" min="0" max="20" step="0.5" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Type</label>
+                    <select name="type_note" class="form-select" {% if note and note._id %}disabled{% endif %}>
+                        <option value="examen" {% if note and note.type_note == 'examen' %}selected{% endif %}>Examen</option>
+                        <option value="devoir" {% if note and note.type_note == 'devoir' %}selected{% endif %}>Devoir</option>
+                        <option value="tp" {% if note and note.type_note == 'tp' %}selected{% endif %}>TP</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date</label>
+                    <input type="date" name="date_evaluation" class="form-control" value="{{ note.date_evaluation if note else '' }}">
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> Enregistrer</button>
+                <a href="{{ url_for('head_notes_liste') }}" class="btn btn-secondary rounded-pill px-4"><i class="bi bi-x-lg me-1"></i> Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

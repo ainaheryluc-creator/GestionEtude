@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration — {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="d-flex">
+        <nav class="sidebar d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
+            <div class="d-flex align-items-center mb-3 text-white text-decoration-none px-2">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gradient-warning); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0;">
+                    {{ current_user.get_nom_complet().split()|first|first }}{{ current_user.get_nom_complet().split()|last|first }}
+                </div>
+                <div class="ms-3 user-info">
+                    <span class="fw-semibold d-block" style="font-size: 0.9rem;">{{ current_user.get_nom_complet() }}</span>
+                    <span class="head-user-badge"><i class="bi bi-shield-fill me-1"></i>Chef</span>
+                    <span class="badge ms-1" style="background: rgba(245,158,11,0.15); color: #fcd34d; font-size: 0.65rem;">{{ current_user.get_departement() }}</span>
+                </div>
+            </div>
+            <hr style="border-color: rgba(255,255,255,0.06);">
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li><a href="{{ url_for('head_dashboard') }}" class="nav-link {% if request.endpoint == 'head_dashboard' %}active{% endif %}"><i class="bi bi-speedometer2 me-2"></i><span>Tableau de bord</span></a></li>
+                <li><a href="{{ url_for('head_students') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('head_student') %}active{% endif %}"><i class="bi bi-people-fill me-2"></i><span>Étudiants</span></a></li>
+                <li><a href="{{ url_for('head_annonces') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('head_annonce') %}active{% endif %}"><i class="bi bi-megaphone-fill me-2"></i><span>Annonces</span></a></li>
+                <li><a href="{{ url_for('head_chefs_liste') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('head_chef') %}active{% endif %}"><i class="bi bi-shield-fill me-2"></i><span>Chefs</span></a></li>
+                <li><a href="{{ url_for('head_messages') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('head_message') %}active{% endif %}"><i class="bi bi-chat-dots-fill me-2"></i><span>Messagerie</span></a></li>
+                <li><hr class="divider"></li>
+                <li><a href="{{ url_for('head_cours_liste') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('head_cours') %}active{% endif %}"><i class="bi bi-book-fill me-2"></i><span>Cours</span></a></li>
+                <li><a href="{{ url_for('head_inscriptions_liste') }}" class="nav-link {% if request.endpoint and request.endpoint.startswith('head_inscriptions') %}active{% endif %}"><i class="bi bi-pencil-square me-2"></i><span>Inscriptions</span></a></li>
+                <li class="nav-item"><span class="nav-link" style="color: #64748b; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; padding: 0.25rem 0.75rem;"><i class="bi bi-calendar-range me-2"></i>Notes par Semestre</span></li>
+                {% for s in ['S1','S2','S3','S4'] %}
+                <li class="nav-item">
+                    <a href="{{ url_for('head_notes_par_semestre', semestre=s) }}" class="nav-link py-1 ps-4 {% if request.endpoint == 'head_notes_par_semestre' and semestre == s %}active{% endif %}" style="font-size: 0.85rem;">
+                        <span class="badge me-2" style="background: rgba(6,182,212,0.15); color: #67e8f9; font-size: 0.65rem;">{{ s }}</span>Saisie des notes
+                    </a>
+                </li>
+                {% endfor %}
+                <li><hr class="divider"></li>
+                <li><a href="{{ url_for('head_notes_liste') }}" class="nav-link {% if request.endpoint and request.endpoint == 'head_notes_liste' %}active{% endif %}"><i class="bi bi-file-text-fill me-2"></i><span>Toutes les notes</span></a></li>
+                <li><a href="{{ url_for('head_moyennes') }}" class="nav-link {% if request.endpoint == 'head_moyennes' %}active{% endif %}"><i class="bi bi-bar-chart-fill me-2"></i><span>Moyennes</span></a></li>
+            </ul>
+            <hr style="border-color: rgba(255,255,255,0.06);">
+            <a href="{{ url_for('head_profile') }}" class="btn btn-sm w-100 mb-2" style="background: rgba(245,158,11,0.1); color: #fcd34d; border: 1px solid rgba(245,158,11,0.2);">
+                <i class="bi bi-person-gear me-1"></i> Mon profil
+            </a>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm w-100" style="background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2);">
+                <i class="bi bi-box-arrow-right me-1"></i> Déconnexion
+            </a>
+        </nav>
+
+        <div class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show d-flex align-items-center">
+                            <i class="bi bi-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-triangle{% else %}info-circle{% endif %} me-2"></i>
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

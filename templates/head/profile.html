@@ -1,0 +1,49 @@
+{% extends "head/base.html" %}
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: var(--gradient-warning); border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0"><i class="bi bi-person-gear me-2" style="color: #f59e0b;"></i>Mon profil</h2>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-5">
+        <div class="card">
+            <div class="card-body text-center p-4">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--gradient-warning); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 2rem; margin: 0 auto 1rem;">
+                    {{ user.prenom[:1] }}{{ user.nom[:1] }}
+                </div>
+                <h5 class="fw-bold">{{ user.prenom }} {{ user.nom }}</h5>
+                <span class="badge fs-6 px-3 py-2 mb-2" style="background: var(--gradient-warning);">{{ user.departement }}</span>
+                <p style="color: #64748b; font-size: 0.9rem;"><i class="bi bi-envelope me-1"></i>{{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-body p-4">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" name="nom" class="form-control" value="{{ user.nom }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prénom</label>
+                        <input type="text" name="prenom" class="form-control" value="{{ user.prenom }}" required>
+                    </div>
+                    <hr style="border-color: rgba(255,255,255,0.06);">
+                    <h6 class="fw-semibold mb-3" style="color: #f59e0b;"><i class="bi bi-key-fill me-2"></i>Changer le mot de passe</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Nouveau mot de passe</label>
+                        <input type="password" name="new_password" class="form-control" placeholder="Laisser vide pour ne pas changer">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Confirmer le mot de passe</label>
+                        <input type="password" name="confirm_password" class="form-control" placeholder="Confirmer">
+                    </div>
+                    <button type="submit" class="btn btn-warning rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
