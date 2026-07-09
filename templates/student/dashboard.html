@@ -1,0 +1,89 @@
+{% extends "student/base.html" %}
+{% block title %}Tableau de bord{% endblock %}
+{% block content %}
+
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: var(--gradient-info); border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0">Tableau de bord</h2>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card info">
+            <div class="card-body">
+                <h6 class="text-white-50" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Matricule</h6>
+                <h3 class="text-white fw-bold mb-0">{{ current_user.get_matricule() }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card green">
+            <div class="card-body">
+                <h6 class="text-white-50" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Cours inscrits</h6>
+                <h3 class="text-white fw-bold mb-0">{{ stats.cours }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card purple">
+            <div class="card-body">
+                <h6 class="text-white-50" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">Moyenne générale</h6>
+                {% if stats.moyenne is not none %}
+                    <h3 class="fw-bold mb-0">
+                        <span class="badge-score {% if stats.moyenne >= 16 %}bg-success{% elif stats.moyenne >= 12 %}bg-primary{% elif stats.moyenne >= 10 %}bg-warning text-dark{% else %}bg-danger{% endif %}">
+                            {{ stats.moyenne }}/20
+                        </span>
+                    </h3>
+                {% else %}
+                    <h6 class="text-white-50 mb-0">Aucune note</h6>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi-megaphone-fill me-2" style="color: #f59e0b;"></i>Annonces récentes</span>
+                <a href="{{ url_for('student_annonces') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">Voir tout <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+            <div class="card-body">
+                {% if annonces %}
+                    {% for a in annonces %}
+                    <div class="mb-3 pb-3" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <h6 class="fw-bold mb-1">{{ a.titre }}</h6>
+                        <p class="mb-1" style="color: #94a3b8; font-size: 0.9rem;">{{ a.contenu[:150] }}{% if a.contenu|length > 150 %}...{% endif %}</p>
+                        <small style="color: #64748b;"><i class="bi bi-person me-1"></i>{{ a.auteur_nom }} <i class="bi bi-calendar ms-3 me-1"></i>{{ a.date_creation }}</small>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state"><i class="bi bi-megaphone"></i><p class="mb-0">Aucune annonce récente.</p></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card h-100 student-profile-card">
+            <div class="card-header"><i class="bi bi-person-fill me-2" style="color: #3b82f6;"></i>Mon profil</div>
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-4">
+                    <div style="width: 56px; height: 56px; border-radius: 50%; background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.5rem; flex-shrink: 0;">
+                        {{ current_user.get_nom_complet().split()|first|first }}{{ current_user.get_nom_complet().split()|last|first }}
+                    </div>
+                    <div class="ms-3">
+                        <h5 class="fw-bold mb-0">{{ current_user.user_data.prenom }} {{ current_user.user_data.nom }}</h5>
+                        <span class="badge mt-1" style="background: rgba(37,99,235,0.15); color: #93c5fd;">{{ current_user.get_departement() }}</span>
+                    </div>
+                </div>
+                <table class="table table-sm mb-0">
+                    <tr><td style="color: #64748b; width: 40%;">Email</td><td class="fw-semibold">{{ current_user.user_data.email }}</td></tr>
+                    <tr><td style="color: #64748b;">Matricule</td><td><span class="badge bg-secondary">{{ current_user.get_matricule() }}</span></td></tr>
+                    <tr><td style="color: #64748b;">Département</td><td><span class="badge" style="background: rgba(6,182,212,0.15); color: #67e8f9;">{{ current_user.get_departement() }}</span></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

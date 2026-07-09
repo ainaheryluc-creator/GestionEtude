@@ -1,0 +1,68 @@
+{% extends "student/base.html" %}
+{% block title %}Messagerie{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: #3b82f6; border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0"><i class="bi bi-chat-dots-fill me-2" style="color: #3b82f6;"></i>Messagerie</h2>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span><i class="bi bi bi-chat-quote-fill me-2" style="color: #3b82f6;"></i>Conversation avec le chef de département</span>
+                <span class="badge" style="background: rgba(59,130,246,0.15); color: #93c5fd;">{{ chef_nom }}</span>
+            </div>
+            <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                {% if messages %}
+                    {% for m in messages %}
+                    <div class="d-flex mb-3 {% if m.expediteur == 'etudiant' %}justify-content-end{% endif %}">
+                        <div class="rounded-3 p-3" style="max-width: 80%; {% if m.expediteur == 'etudiant' %}background: rgba(59,130,246,0.15); color: #93c5fd;{% else %}background: rgba(255,255,255,0.06); color: #e2e8f0;{% endif %}">
+                            <div class="d-flex align-items-center mb-1">
+                                <small class="fw-semibold" style="color: {% if m.expediteur == 'etudiant' %}#60a5fa{% else %}#94a3b8{% endif %};">
+                                    {% if m.expediteur == 'etudiant' %}Vous{% else %}{{ chef_nom }}{% endif %}
+                                </small>
+                                <small class="ms-2" style="color: #64748b; font-size: 0.7rem;">
+                                    {{ m.date_envoi.strftime('%d/%m/%Y %H:%M') if m.date_envoi is not string else m.date_envoi }}
+                                </small>
+                            </div>
+                            <p class="mb-0" style="font-size: 0.9rem;">{{ m.contenu }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-chat-dots"></i>
+                        <p class="mb-0">Aucun message pour le moment.</p>
+                        <small>Envoyez un message au chef de département ci-contre.</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-send-fill me-2" style="color: #10b981;"></i>Nouveau message
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('student_message_send') }}">
+                    <div class="mb-3">
+                        <label class="form-label">Destinataire</label>
+                        <div class="p-2 rounded" style="background: rgba(16,185,129,0.1); color: #6ee7b7; font-weight: 500; font-size: 0.9rem;">
+                            <i class="bi bi-person-badge me-1"></i> {{ chef_nom }} (Chef département)
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="contenu" class="form-label">Votre message</label>
+                        <textarea name="contenu" id="contenu" class="form-control" rows="5" placeholder="Écrivez votre message ici..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 rounded-pill py-2">
+                        <i class="bi bi-send-fill me-2"></i>Envoyer
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

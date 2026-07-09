@@ -1,0 +1,131 @@
+{% extends "public/base.html" %}
+{% block title %}Accueil — Université Privée Hay (UPH){% endblock %}
+{% block content %}
+
+<div class="hero-section text-white rounded-4 p-5 mb-5 shadow-lg position-relative overflow-hidden">
+    <div class="row align-items-center position-relative" style="z-index: 1;">
+        <div class="col-lg-8">
+            <h1 class="display-4 fw-bold mb-3" style="letter-spacing: -0.02em;">
+                <i class="bi bi-mortarboard-fill me-2" style="color: #3b82f6;"></i>Université Privée Hay (UPH)
+            </h1>
+            <p class="lead mb-4" style="color: #94a3b8; font-size: 1.15rem;">
+                <strong>Qualité — Efficacité — Excellence</strong><br>
+                Système LMD — Immeuble CNAPS 67 Ha, Antananarivo
+            </p>
+            <div class="d-flex gap-3">
+                <a href="{{ url_for('public_login') }}" class="btn btn-primary btn-lg rounded-pill px-5">
+                    <i class="bi bi-key-fill me-2"></i>Accès plateforme
+                </a>
+                <a href="{{ url_for('public_annonces') }}" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                    <i class="bi bi-megaphone-fill me-2"></i>Annonces
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-4 text-center d-none d-lg-block">
+            <img src="{{ url_for('static', filename='images/uph-building.jpg') }}" alt="Université Privée Hay" class="rounded-3 shadow" style="max-width: 100%; height: auto; max-height: 280px; object-fit: cover; border: 3px solid rgba(255,255,255,0.1);">
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    {% for dept in departements %}
+    <div class="col-md-3 col-6">
+        <div class="card department-card text-center h-100 border-0 shadow-sm" style="background: #fff;">
+            <div class="card-body p-4">
+                <div class="icon-circle mb-3"
+                     style="background: {% if dept == 'Informatique' %}rgba(37,99,235,0.1){% elif dept == 'Gestion' %}rgba(16,185,129,0.1){% elif dept == 'Genie Civil' %}rgba(245,158,11,0.1){% else %}rgba(6,182,212,0.1){% endif %};
+                            color: {% if dept == 'Informatique' %}#3b82f6{% elif dept == 'Gestion' %}#10b981{% elif dept == 'Genie Civil' %}#f59e0b{% else %}#06b6d4{% endif %};">
+                    {% if dept == "Informatique" %}
+                        <i class="bi bi-laptop"></i>
+                    {% elif dept == "Gestion" %}
+                        <i class="bi bi-bar-chart-fill"></i>
+                    {% elif dept == "Genie Civil" %}
+                        <i class="bi bi-building"></i>
+                    {% else %}
+                        <i class="bi bi-globe"></i>
+                    {% endif %}
+                </div>
+                <h6 class="fw-bold mb-1" style="color: #1e293b;">{{ dept }}</h6>
+                <p class="display-6 fw-bold mb-0" style="color: {% if dept == 'Informatique' %}#2563eb{% elif dept == 'Gestion' %}#10b981{% elif dept == 'Genie Civil' %}#f59e0b{% else %}#06b6d4{% endif %};">{{ dept_stats[dept] }}</p>
+                <small style="color: #64748b;">étudiants</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card border-0 shadow-sm mb-5" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+    <div class="card-body p-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5 class="fw-bold text-white mb-3"><i class="bi bi-info-circle me-2" style="color: #3b82f6;"></i>À propos de l'Université Privée Hay (UPH)</h5>
+                <p style="color: #94a3b8; font-size: 0.9rem;" class="mb-2">
+                    <i class="bi bi-geo-alt-fill me-2" style="color: #f59e0b;"></i><strong style="color: #e2e8f0;">Adresse :</strong> Immeuble CNAPS, 67 Ha Nord-Est, Antananarivo - Madagascar
+                </p>
+                <p style="color: #94a3b8; font-size: 0.9rem;" class="mb-2">
+                    <i class="bi bi-telephone-fill me-2" style="color: #10b981;"></i><strong style="color: #e2e8f0;">Tél :</strong> 032 78 665 91 / 034 66 602 52 / 22 216 95
+                </p>
+                <p style="color: #94a3b8; font-size: 0.9rem;" class="mb-0">
+                    <i class="bi bi-globe me-2" style="color: #06b6d4;"></i><strong style="color: #e2e8f0;">Formations :</strong> Informatique de Gestion, Gestion-Économie, Génie Civil, Communication
+                </p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{{ url_for('static', filename='images/uph-logo.jpg') }}" alt="UPH" class="rounded-circle shadow" style="width: 100px; height: 100px; object-fit: cover; border: 3px solid rgba(59,130,246,0.3);">
+                <p class="small mt-2 mb-0" style="color: #64748b;">Qualité - Efficacité - Excellence</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm" style="background: #fff;">
+            <div class="card-header bg-white fw-bold" style="color: #1e293b; border-bottom-color: #f1f5f9;">
+                <i class="bi bi-megaphone-fill me-2" style="color: #2563eb;"></i>Dernières annonces
+            </div>
+            <div class="card-body p-4">
+                {% if annonces %}
+                    {% for a in annonces %}
+                    <div class="mb-3 pb-3" style="border-bottom: 1px solid #f1f5f9;">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="fw-bold mb-1" style="color: #1e293b;">{{ a.titre }}</h6>
+                            <span class="badge" style="background: rgba(37,99,235,0.1); color: #2563eb;">{{ a.departement }}</span>
+                        </div>
+                        <p class="mb-1" style="color: #64748b; font-size: 0.9rem;">{{ a.contenu[:200] }}{% if a.contenu|length > 200 %}...{% endif %}</p>
+                        <small style="color: #94a3b8;">
+                            <i class="bi bi-person me-1"></i>{{ a.auteur_nom }}
+                            <i class="bi bi-calendar ms-3 me-1"></i>{{ a.date_creation }}
+                        </small>
+                    </div>
+                    {% endfor %}
+                    <a href="{{ url_for('public_annonces') }}" class="btn btn-outline-primary btn-sm rounded-pill px-4">Voir toutes les annonces <i class="bi bi-arrow-right ms-1"></i></a>
+                {% else %}
+                    <div class="empty-state">
+                        <i class="bi bi-megaphone"></i>
+                        <p class="mb-0">Aucune annonce publique pour le moment.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100" style="background: #fff;">
+            <div class="card-header bg-white fw-bold" style="color: #1e293b; border-bottom-color: #f1f5f9;">
+                <i class="bi bi-person-badge me-2" style="color: #2563eb;"></i>Accès plateforme
+            </div>
+            <div class="card-body p-4 text-center">
+                <i class="bi bi-shield-lock" style="font-size: 3rem; color: #e2e8f0; margin-bottom: 1rem; display: block;"></i>
+                <p style="color: #64748b;">Connectez-vous pour accéder à votre espace personnel</p>
+                <a href="{{ url_for('public_login') }}" class="btn btn-primary w-100 rounded-pill py-2 mb-3">
+                    <i class="bi bi-key-fill me-1"></i>Se connecter
+                </a>
+                <hr style="border-color: #f1f5f9;">
+                <div class="text-start small" style="color: #94a3b8;">
+                    <p class="mb-2"><i class="bi bi-person-gear me-1" style="color: #f59e0b;"></i><strong style="color: #475569;">Chefs</strong> : Gèrent les comptes et publient les annonces</p>
+                    <p class="mb-0"><i class="bi bi-person-fill me-1" style="color: #3b82f6;"></i><strong style="color: #475569;">Étudiants</strong> : Consultent leurs notes, cours et annonces</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

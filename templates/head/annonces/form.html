@@ -1,0 +1,57 @@
+{% extends "head/base.html" %}
+{% block title %}Nouvelle annonce{% endblock %}
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: #f59e0b; border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0"><i class="bi bi-plus-circle-fill me-2" style="color: #f59e0b;"></i>Nouvelle annonce</h2>
+</div>
+<div class="card">
+    <div class="card-body p-4">
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Titre</label>
+                <input type="text" name="titre" class="form-control" placeholder="Titre de l'annonce" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Contenu</label>
+                <textarea name="contenu" class="form-control" rows="6" placeholder="Écrivez le contenu de votre annonce..." required></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Visibilité</label>
+                <div class="row g-3 mt-1">
+                    <div class="col-md-6">
+                        <div class="form-check card p-3 h-100" style="background: rgba(6,182,212,0.05); border: 2px solid rgba(6,182,212,0.15); cursor: pointer;" onclick="document.getElementById('visPublic').click()">
+                            <div class="d-flex align-items-center">
+                                <input class="form-check-input me-3" type="radio" name="visibilite" id="visPublic" value="public" style="transform: scale(1.2);">
+                                <div>
+                                    <label class="form-check-label fw-bold" for="visPublic" style="cursor: pointer; color: #67e8f9;">
+                                        <i class="bi bi-globe me-1"></i>Public
+                                    </label>
+                                    <small class="d-block" style="color: #64748b;">Visible par tout le monde (visiteurs, parents)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-check card p-3 h-100" style="background: rgba(245,158,11,0.05); border: 2px solid rgba(245,158,11,0.15); cursor: pointer;" onclick="document.getElementById('visDept').click()">
+                            <div class="d-flex align-items-center">
+                                <input class="form-check-input me-3" type="radio" name="visibilite" id="visDept" value="departement" checked style="transform: scale(1.2);">
+                                <div>
+                                    <label class="form-check-label fw-bold" for="visDept" style="cursor: pointer; color: #fcd34d;">
+                                        <i class="bi bi-people-fill me-1"></i>Département
+                                    </label>
+                                    <small class="d-block" style="color: #64748b;">Visible seulement par les étudiants de {{ departement }}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> Publier</button>
+                <a href="{{ url_for('head_annonces') }}" class="btn btn-secondary rounded-pill px-4"><i class="bi bi-x-lg me-1"></i> Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

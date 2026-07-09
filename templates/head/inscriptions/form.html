@@ -1,0 +1,37 @@
+{% extends "head/base.html" %}
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: var(--gradient-info); border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0"><i class="bi bi-pencil-fill me-2" style="color: #06b6d4;"></i>Nouvelle inscription</h2>
+</div>
+<div class="card">
+    <div class="card-body p-4">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Étudiant</label>
+                    <select name="id_etudiant" class="form-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        {% for e in etudiants %}<option value="{{ e._id }}">{{ e.nom }} {{ e.prenom }} ({{ e.matricule }})</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Cours</label>
+                    <select name="id_cours" class="form-select" required>
+                        <option value="">-- Sélectionner --</option>
+                        {% for c in cours %}<option value="{{ c._id }}">{{ c.intitule }} ({{ c.code }})</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Année académique</label>
+                    <input type="text" name="annee_academique" class="form-control" value="2025-2026" required>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> Inscrire</button>
+                <a href="{{ url_for('head_inscriptions_liste') }}" class="btn btn-secondary rounded-pill px-4"><i class="bi bi-x-lg me-1"></i> Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

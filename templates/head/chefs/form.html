@@ -1,0 +1,36 @@
+{% extends "head/base.html" %}
+{% block content %}
+<div class="d-flex align-items-center mb-4">
+    <div class="me-3" style="width: 4px; height: 32px; background: var(--gradient-success); border-radius: 4px;"></div>
+    <h2 class="fw-bold mb-0">{{ "Modifier" if chef and chef._id else "Ajouter" }} un chef de département</h2>
+</div>
+<div class="card">
+    <div class="card-body p-4">
+        <form method="POST">
+            <div class="row g-3">
+                <div class="col-md-6"><label class="form-label">Nom</label><input type="text" name="nom" class="form-control" value="{{ data.nom if data else '' }}" required></div>
+                <div class="col-md-6"><label class="form-label">Prénom</label><input type="text" name="prenom" class="form-control" value="{{ data.prenom if data else '' }}" required></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ data.email if data else '' }}" {{ 'required' if not (chef and chef._id) else 'readonly' }}></div>
+                <div class="col-md-6">
+                    <label class="form-label">Département</label>
+                    <select name="departement" class="form-select" required>
+                        <option value="">Sélectionner...</option>
+                        {% for d in departements %}
+                        <option value="{{ d }}" {% if data and data.departement == d %}selected{% endif %}>{{ d }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">{{ "Nouveau mot de passe" if chef and chef._id else "Mot de passe" }}</label>
+                    <input type="password" name="password" class="form-control" placeholder="{{ 'Laisser vide pour conserver' if chef and chef._id else 'Minimum 4 caractères' }}" {{ '' if chef and chef._id else 'required' }}>
+                </div>
+                <div class="col-md-6"><label class="form-label">Téléphone</label><input type="text" name="telephone" class="form-control" value="{{ data.telephone if data else '' }}"></div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> Enregistrer</button>
+                <a href="{{ url_for('head_chefs_liste') }}" class="btn btn-secondary rounded-pill px-4"><i class="bi bi-x-lg me-1"></i> Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

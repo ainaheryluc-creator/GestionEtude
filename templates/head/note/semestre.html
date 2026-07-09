@@ -1,0 +1,84 @@
+{% extends "head/base.html" %}
+{% block content %}
+<div class="action-bar">
+    <div>
+        <div class="d-flex align-items-center gap-3 mb-1">
+            <a href="{{ url_for('head_notes_liste') }}" class="btn btn-sm btn-outline-light rounded-pill px-3"><i class="bi bi-arrow-left me-1"></i> Retour</a>
+            <h2 class="fw-bold mb-0"><i class="bi bi-file-text-fill me-2" style="color: #3b82f6;"></i>Notes par semestre</h2>
+        </div>
+        <p style="color: #64748b; margin-left: 2.5rem;">{{ etudiant }} — <span class="badge bg-secondary">{{ matricule }}</span></p>
+    </div>
+</div>
+
+{% if semestres %}
+    {% for sem in semestres %}
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center" style="border-bottom: 2px solid rgba(37,99,235,0.15);">
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge fs-6 px-3 py-2" style="background: var(--gradient-primary);">Semestre {{ sem.semestre }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <span style="color: #64748b; font-size: 0.85rem;">Moyenne :</span>
+                {% if sem.moyenne is not none %}
+                    <span class="badge-score {% if sem.moyenne >= 16 %}bg-success{% elif sem.moyenne >= 12 %}bg-primary{% elif sem.moyenne >= 10 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-5">
+                        {{ sem.moyenne }}/20
+                    </span>
+                {% else %}
+                    <span class="badge bg-secondary">N/A</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-dark table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">UE</th>
+                        <th style="width: 80px;">Code</th>
+                        <th>Intitulé</th>
+                        <th style="width: 150px;">Enseignant</th>
+                        <th style="width: 100px;" class="text-center">CC /20</th>
+                        <th style="width: 100px;" class="text-center">Examen /20</th>
+                        <th style="width: 80px;" class="text-center">Moy.</th>
+                        <th style="width: 60px;" class="text-center">Coeff.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ue in sem.ues %}
+                    <tr>
+                        <td><span class="badge bg-secondary">{{ ue.code_ue if ue.code_ue is defined else ue.code }}</span></td>
+                        <td><span class="badge bg-info text-dark">{{ ue.code if ue.code is defined else '' }}</span></td>
+                        <td class="fw-semibold">{{ ue.intitule }}</td>
+                        <td style="color: #94a3b8;">{{ ue.enseignant if ue.enseignant is defined else '—' }}</td>
+                        <td class="text-center">
+                            {% if ue.cc is not none and ue.cc is defined %}
+                                <span class="badge {% if ue.cc >= 16 %}bg-success{% elif ue.cc >= 12 %}bg-primary{% elif ue.cc >= 10 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6 px-3">{{ ue.cc }}</span>
+                            {% else %}
+                                <span class="text-white-50">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if ue.examen is not none and ue.examen is defined %}
+                                <span class="badge {% if ue.examen >= 16 %}bg-success{% elif ue.examen >= 12 %}bg-primary{% elif ue.examen >= 10 %}bg-warning text-dark{% else %}bg-danger{% endif %} fs-6 px-3">{{ ue.examen }}</span>
+                            {% else %}
+                                <span class="text-white-50">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if ue.moyenne is not none %}
+                                <span class="badge-score {% if ue.moyenne >= 16 %}bg-success{% elif ue.moyenne >= 12 %}bg-primary{% elif ue.moyenne >= 10 %}bg-warning text-dark{% else %}bg-danger{% endif %}">{{ ue.moyenne }}</span>
+                            {% else %}
+                                <span class="text-white-50">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center" style="color: #94a3b8;">{{ ue.coeff }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card"><div class="card-body empty-state"><i class="bi bi-file-text"></i><p class="mb-0">Aucune note pour cet étudiant.</p></div></div>
+{% endif %}
+{% endblock %}
