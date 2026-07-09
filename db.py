@@ -6,14 +6,13 @@ db = None
 
 def connect():
     global client, db
-    try:
-        if client is None:
-            client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=15000, connectTimeoutMS=15000)
-            db = client[DB_NAME]
-            db.command("ping")
+    if client is not None:
         return True
-    except Exception as e:
-        print(f"Erreur de connexion à MongoDB : {e}")
+    try:
+        client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=10000)
+        db = client[DB_NAME]
+        return True
+    except Exception:
         client = None
         db = None
         return False
