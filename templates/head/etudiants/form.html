@@ -1,9 +1,9 @@
 {% extends "head/base.html" %}
-{% block title %}Créer un étudiant{% endblock %}
+{% block title %}{{ "Modifier" if edit_mode else "Créer" }} un étudiant{% endblock %}
 {% block content %}
 <div class="d-flex align-items-center mb-4">
     <div class="me-3" style="width: 4px; height: 32px; background: var(--gradient-primary); border-radius: 4px;"></div>
-    <h2 class="fw-bold mb-0"><i class="bi bi-person-plus-fill me-2" style="color: #3b82f6;"></i>Créer un compte étudiant</h2>
+    <h2 class="fw-bold mb-0"><i class="bi {{ 'bi-pencil-fill' if edit_mode else 'bi-person-plus-fill' }} me-2" style="color: #3b82f6;"></i>{{ "Modifier" if edit_mode else "Créer" }} un compte étudiant</h2>
 </div>
 <div class="card">
     <div class="card-body p-4">
@@ -12,25 +12,27 @@
                 <div class="col-md-4">
                     <label class="form-label">Matricule</label>
                     <div class="input-group">
-                        <input type="text" name="matricule" class="form-control" value="{{ data.matricule if data else auto_matricule }}">
+                        <input type="text" name="matricule" class="form-control" value="{{ data.matricule if data else auto_matricule }}" {% if edit_mode %}readonly{% endif %}>
                         <span class="input-group-text" style="background: rgba(6,182,212,0.15); color: #67e8f9; border-color: rgba(255,255,255,0.1);"><i class="bi bi-arrow-repeat"></i></span>
                     </div>
-                    <div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Laissez vide pour auto-générer (ex: {{ auto_matricule }})</div>
+                    {% if not edit_mode %}<div style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Laissez vide pour auto-générer (ex: {{ auto_matricule }})</div>{% endif %}
                 </div>
                 <div class="col-md-4"><label class="form-label">Nom</label><input type="text" name="nom" class="form-control" value="{{ data.nom if data else '' }}" required></div>
                 <div class="col-md-4"><label class="form-label">Prénom</label><input type="text" name="prenom" class="form-control" value="{{ data.prenom if data else '' }}" required></div>
-                <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ data.email if data else '' }}" required></div>
-                <div class="col-md-3"><label class="form-label">Mot de passe</label><input type="password" name="password" class="form-control" placeholder="Min 4 car." required></div>
+                <div class="col-md-6"><label class="form-label">Email</label><input type="email" name="email" class="form-control" value="{{ data.email if data else '' }}" {% if edit_mode %}readonly{% endif %} required></div>
+                <div class="col-md-3"><label class="form-label">{{ "Nouveau " if edit_mode else "" }}Mot de passe</label><input type="password" name="password" class="form-control" placeholder="{{ 'Laisser vide pour conserver' if edit_mode else 'Min 4 car.' }}"></div>
                 <div class="col-md-3"><label class="form-label">Téléphone</label><input type="tel" name="telephone" class="form-control" value="{{ data.telephone if data else '' }}"></div>
+                {% if not edit_mode %}
                 <div class="col-md-4"><label class="form-label">Date de naissance</label><input type="date" name="date_naissance" class="form-control" value="{{ data.date_naissance if data else '' }}"></div>
                 <div class="col-md-8"><label class="form-label">Adresse</label><input type="text" name="adresse" class="form-control" value="{{ data.adresse if data else '' }}"></div>
+                {% endif %}
             </div>
             <div class="alert alert-info mt-3 d-flex align-items-center">
                 <i class="bi bi-info-circle me-2 fs-5"></i>
                 Le département sera automatiquement <strong>{{ departement }}</strong>.
             </div>
             <div class="mt-4 d-flex gap-2">
-                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> Créer le compte</button>
+                <button type="submit" class="btn btn-primary rounded-pill px-4"><i class="bi bi-check-lg me-1"></i> {{ "Enregistrer" if edit_mode else "Créer le compte" }}</button>
                 <a href="{{ url_for('head_students') }}" class="btn btn-secondary rounded-pill px-4"><i class="bi bi-x-lg me-1"></i> Annuler</a>
             </div>
         </form>

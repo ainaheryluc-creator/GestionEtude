@@ -509,6 +509,46 @@ def head_student_delete(id):
         flash("ID invalide.", "danger")
     return redirect(url_for("head_students"))
 
+@app.route("/chef/etudiants/<id>/modifier", methods=["GET", "POST"])
+@login_required
+def head_student_modify(id):
+    if current_user.get_role() != "head":
+        flash("Accès refusé.", "danger")
+        return redirect(url_for("public_index"))
+    dept = current_user.get_departement()
+    try:
+        user = get_collection("users").find_one({"_id": ObjectId(id)})
+    except InvalidId:
+        flash("ID invalide.", "danger")
+        return redirect(url_for("head_students"))
+    if not user or user.get("departement") != dept:
+        flash("Étudiant introuvable.", "danger")
+        return redirect(url_for("head_students"))
+    etu = get_collection("etudiants").find_one({"matricule": user.get("matricule", "")})
+    if request.method == "POST":
+        nom = request.form.get("nom", "").strip().upper()
+        prenom = request.form.get("prenom", "").strip().capitalize()
+        update_data = {
+            "nom": nom,
+            "prenom": prenom,
+            "telephone": request.form.get("telephone", "").strip(),
+        }
+        new_pw = request.form.get("password", "").strip()
+        if new_pw:
+            if len(new_pw) < 4:
+                flash("Le mot de passe doit contenir au moins 4 caractères.", "danger")
+                return render_template("head/etudiants/form.html", data=user, departement=dept, auto_matricule=user.get("matricule", ""), edit_mode=True)
+            update_data["password"] = generate_password_hash(new_pw)
+        get_collection("users").update_one({"_id": ObjectId(id)}, {"$set": update_data})
+        if etu:
+            get_collection("etudiants").update_one(
+                {"_id": etu["_id"]},
+                {"$set": {"nom": nom, "prenom": prenom, "telephone": request.form.get("telephone", "").strip()}}
+            )
+        flash("Étudiant modifié avec succès.", "success")
+        return redirect(url_for("head_students"))
+    return render_template("head/etudiants/form.html", data=user, departement=dept, auto_matricule=user.get("matricule", ""), edit_mode=True)
+
 @app.route("/chef/annonces")
 @login_required
 def head_annonces():

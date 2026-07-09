@@ -22,6 +22,7 @@
                         <td>{{ e.prenom }}</td>
                         <td style="color: #94a3b8;">{{ e.email }}</td>
                         <td class="text-end">
+                            <a href="{{ url_for('head_student_modify', id=e._id) }}" class="btn btn-sm btn-outline-warning rounded-pill px-3" title="Modifier"><i class="bi bi-pencil me-1"></i>Modifier</a>
                             <form action="{{ url_for('head_student_delete', id=e._id) }}" method="POST" class="d-inline delete-form">
                                 <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" title="Supprimer"><i class="bi bi-trash me-1"></i>Supprimer</button>
                             </form>
