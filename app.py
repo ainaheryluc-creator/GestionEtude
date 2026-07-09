@@ -14,6 +14,10 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "public_login"
 
+@app.route("/health")
+def health():
+    return "OK", 200
+
 DEPARTEMENTS = ["Informatique", "Gestion", "Genie Civil", "Communication"]
 SEMESTRES = ["S1", "S2", "S3", "S4"]
 UES = ["U001", "U002", "U003", "U004", "U005"]

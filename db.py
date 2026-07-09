@@ -8,7 +8,7 @@ def connect():
     global client, db
     try:
         if client is None:
-            client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
+            client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=1000)
             db = client[DB_NAME]
             db.command("ping")
         return True
