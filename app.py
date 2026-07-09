@@ -1073,4 +1073,4 @@ def head_message_reply(id_etudiant):
     return redirect(url_for("head_messages_conversation", id_etudiant=id_etudiant))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000)
